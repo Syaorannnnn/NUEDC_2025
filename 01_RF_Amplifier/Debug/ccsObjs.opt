@@ -1,0 +1,9 @@
+"./RF_Amplifier.o"
+"./ti_msp_dl_config.o"
+"./startup_mspm0g350x_ticlang.o"
+"./HARDWARE/BTN/BTN.o"
+"./HARDWARE/LCD/tjc_usart_hmi.o"
+"./HARDWARE/TICK/Tick.o"
+-l"./device_linker.cmd"
+-ldevice.cmd.genlibs
+-llibc.a
