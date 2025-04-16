@@ -68,7 +68,10 @@ int main(void)
 	tjc_send_string(str);
 	while (1)
 	{
-		
+		/*
+         * 经过纠正加减输出的电压误差发生概率变小
+         * 出现的误差大小仅有±1mV
+         */
 		BTN_getData(&BTNData);
 				if(BTNData.left)
 				{
