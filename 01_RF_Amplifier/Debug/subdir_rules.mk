@@ -15,7 +15,7 @@ SHELL = cmd.exe
 build-931841473: ../RF_Amplifier.syscfg
 	@echo 'Building file: "$<"'
 	@echo 'Invoking: SysConfig'
-	"E:/ti/ccstheia151/ccs/utils/sysconfig_1.21.1/sysconfig_cli.bat" --script "E:/ti/workspace/01_RF_Amplifier/RF_Amplifier.syscfg" -o "." -s "E:/ti/SDK/mspm0_sdk_2_04_00_06/.metadata/product.json" --compiler ticlang
+	"E:/ti/sysconfig_1.23.1/sysconfig_cli.bat" --script "E:/ti/workspace/01_RF_Amplifier/RF_Amplifier.syscfg" -o "." -s "E:/ti/SDK/mspm0_sdk_2_04_00_06/.metadata/product.json" --compiler ticlang
 	@echo 'Finished building: "$<"'
 	@echo ' '
 

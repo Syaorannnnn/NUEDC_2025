@@ -64,7 +64,7 @@ int main(void)
 	DL_DAC12_output12(DAC0, dac_value);
 	DL_DAC12_enable(DAC0);
 	/*这里的误差消除不了，固定4mV*/
-	sprintf(str,"t1.txt=\"%d mV\"",0);
+	sprintf(str,"msg.txt=\"%d mV\"",0);
 	tjc_send_string(str);
 	while (1)
 	{
@@ -83,7 +83,7 @@ int main(void)
 						dac_value = (step_sum + 5) * DAC_MAX / DAC_VCC;
 						DL_DAC12_output12(DAC0, dac_value);
 					
-						sprintf(str,"t1.txt=\"%d mV\"",step_sum);
+						sprintf(str,"msg.txt=\"%d mV\"",step_sum);
 						tjc_send_string(str);
 				}
 				if(BTNData.right)
@@ -96,7 +96,7 @@ int main(void)
 						dac_value = (step_sum + 5) * DAC_MAX / DAC_VCC;
 						DL_DAC12_output12(DAC0, dac_value);
 					
-						sprintf(str,"t1.txt=\"%d mV\"",step_sum);
+						sprintf(str,"msg.txt=\"%d mV\"",step_sum);
 						tjc_send_string(str);
 				}				
 		}
