@@ -35,10 +35,11 @@
 #include "././LCD/tjc_usart_hmi.h"
 #include "././BTN/BTN.h"
 
-#define DAC_MAX 	(4095)
-#define DAC_VCC		(3300)
-#define STEP	    (10)		//步进
-#define AD_MAX		(500)
+#define DAC_MAX 	                        (4095)
+#define DAC_VCC		                        (3300)
+#define STEP	                            (10)		                    //步进10mV
+#define AD_MAX		                        (1600)
+#define CORRECTED_VALUE                     (5 * DAC_MAX / DAC_VCC)         //修正值
 
 volatile uint32_t delay_times = 0;
 volatile uint8_t uart_data = 0;
@@ -53,6 +54,7 @@ int main(void)
 	NVIC_EnableIRQ(UART_0_INST_INT_IRQN);
 
     uint32_t dac_value = 0;
+    uint32_t dac_value0 = 0;
     uint32_t step_sum = 0;
     BTNData_t BTNData = {0};
     
@@ -60,11 +62,15 @@ int main(void)
 
 	char str[100] = {0};
 	//uint32_t last_time = 0;
-	
-	DL_DAC12_output12(DAC0, dac_value);
+
+	dac_value0 = 1000 * DAC_MAX / DAC_VCC + CORRECTED_VALUE;    //初始电压1V
+	DL_DAC12_output12(DAC0, dac_value0);
 	DL_DAC12_enable(DAC0);
 	/*这里的误差消除不了，固定4mV*/
-	sprintf(str,"msg.txt=\"%d mV\"",0);
+	sprintf(str,"msg.txt=\"%d mV\"",1000);
+	tjc_send_string(str);
+
+    sprintf(str,"t2.txt=\"%d dB\"",0);
 	tjc_send_string(str);
 	while (1)
 	{
@@ -76,14 +82,18 @@ int main(void)
 				if(BTNData.left)
 				{
 						DL_GPIO_togglePins(GPIO_LEDS_PORT, GPIO_LEDS_PIN_B_PIN);
-						count += 1;
+						
 						step_sum = count * STEP;
-						if(step_sum > AD_MAX) count = 50;
+						if((step_sum + 1000) >= AD_MAX) count = 60;
+                        else count += 1;
 
-						dac_value = (step_sum + 5) * DAC_MAX / DAC_VCC;
+						dac_value = step_sum * DAC_MAX / DAC_VCC + dac_value0;
 						DL_DAC12_output12(DAC0, dac_value);
 					
-						sprintf(str,"msg.txt=\"%d mV\"",step_sum);
+						sprintf(str,"msg.txt=\"%d mV\"",(step_sum + 1000));
+						tjc_send_string(str);
+
+                        sprintf(str,"t2.txt=\"%d dB\"",(uint32_t)(step_sum * 0.04));
 						tjc_send_string(str);
 				}
 				if(BTNData.right)
@@ -93,10 +103,13 @@ int main(void)
 						if(count < 0) count = 0;
 
 						step_sum = count * STEP;
-						dac_value = (step_sum + 5) * DAC_MAX / DAC_VCC;
+						dac_value = step_sum * DAC_MAX / DAC_VCC + dac_value0;
 						DL_DAC12_output12(DAC0, dac_value);
 					
-						sprintf(str,"msg.txt=\"%d mV\"",step_sum);
+						sprintf(str,"msg.txt=\"%d mV\"",(step_sum + 1000));
+						tjc_send_string(str);
+
+                        sprintf(str,"t2.txt=\"%d dB\"",(uint32_t)(step_sum * 0.04));
 						tjc_send_string(str);
 				}				
 		}

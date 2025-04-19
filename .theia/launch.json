@@ -7,15 +7,6 @@
             "request": "launch",
             "projectInfo": {
                 "name": "01_RF_Amplifier",
-                "resourceId": "/01_RF_Amplifier/targetConfigs/MSPM0G3507.ccxml"
-            }
-        },
-        {
-            "name": "01_RF_Amplifier (1)",
-            "type": "ccs-debug",
-            "request": "launch",
-            "projectInfo": {
-                "name": "01_RF_Amplifier",
                 "resourceId": "/01_RF_Amplifier/RF_Amplifier.c"
             }
         }
